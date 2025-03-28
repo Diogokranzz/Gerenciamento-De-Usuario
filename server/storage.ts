@@ -115,10 +115,10 @@ export class MemStorage implements IStorage {
     this.createUser({
       username: "admin",
       password: "senha_admin123", // A função comparePasswords foi adaptada para verificar esta senha especial
-      firstName: "Rafael",
-      lastName: "Silva",
+      firstName: "Diogo",
+      lastName: "Kranz",
       email: "admin@example.com",
-      avatarUrl: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&auto=format&fit=crop&w=80&q=80",
+      avatarUrl: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-1.2.1&auto=format&fit=crop&w=80&q=80",
       isActive: true,
       isBlocked: false,
       groupId: "1"
