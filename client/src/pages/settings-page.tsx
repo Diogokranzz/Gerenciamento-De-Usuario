@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { pageVariants, itemVariants } from "@/utils/animations";
 import { useToast } from "@/hooks/use-toast";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card3D, Card3DContent, Card3DHeader } from "@/components/ui/3d-card";
 import { 
   Bell, 
@@ -28,10 +28,19 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs";
 import { useAuth } from "@/hooks/use-auth";
+import { useTheme } from "@/context/theme-provider";
 
 export default function SettingsPage() {
   const { toast } = useToast();
   const { user } = useAuth();
+  const {
+    darkMode,
+    animations,
+    compactMode,
+    highContrast,
+    updateThemeSetting
+  } = useTheme();
+  
   const [securitySettings, setSecuritySettings] = useState({
     twoFactorAuth: false,
     passwordExpiration: true,
@@ -60,6 +69,16 @@ export default function SettingsPage() {
     anonymizeData: false,
   });
 
+  // Sincronizar com as configurações de tema do contexto global
+  useEffect(() => {
+    setDisplaySettings({
+      darkMode,
+      animations,
+      compactMode,
+      highContrast
+    });
+  }, [darkMode, animations, compactMode, highContrast]);
+
   const handleSecurityChange = (setting: string, value: boolean) => {
     setSecuritySettings(prev => ({ ...prev, [setting]: value }));
     toast({
@@ -77,7 +96,10 @@ export default function SettingsPage() {
   };
 
   const handleDisplayChange = (setting: string, value: boolean) => {
+    // Atualizar tanto o estado local quanto o contexto global de tema
     setDisplaySettings(prev => ({ ...prev, [setting]: value }));
+    updateThemeSetting(setting, value);
+    
     toast({
       title: "Configuração de exibição atualizada",
       description: `${setting} foi ${value ? 'ativado' : 'desativado'}.`,

@@ -13,6 +13,7 @@ import ActivitiesPage from "@/pages/activities-page";
 import SettingsPage from "@/pages/settings-page";
 import ProfilePage from "@/pages/profile-page";
 import { AuthProvider } from "@/context/auth-provider";
+import { ThemeProvider } from "@/context/theme-provider";
 import { ProtectedRoute } from "@/lib/protected-route";
 
 function Router() {
@@ -37,8 +38,10 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <Router />
-        <Toaster />
+        <ThemeProvider>
+          <Router />
+          <Toaster />
+        </ThemeProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

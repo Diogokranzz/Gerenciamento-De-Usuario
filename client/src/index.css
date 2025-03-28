@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --theme-appearance: light;
+}
+
 @layer base {
   * {
     @apply border-border;
@@ -9,5 +13,60 @@
 
   body {
     @apply font-sans antialiased bg-background text-foreground;
+  }
+
+  .dark {
+    color-scheme: dark;
+    --background: hsl(240 10% 3.9%);
+    --foreground: hsl(0 0% 98%);
+    --muted: hsl(240 3.7% 15.9%);
+    --muted-foreground: hsl(240 5% 64.9%);
+    --card: hsl(240 10% 3.9%);
+    --card-foreground: hsl(0 0% 98%);
+    --border: hsl(240 3.7% 15.9%);
+    --input: hsl(240 3.7% 15.9%);
+  }
+
+  .compact-mode {
+    --compact-scale: 0.85;
+    font-size: calc(1rem * var(--compact-scale));
+  }
+
+  .compact-mode .p-4 {
+    padding: 0.75rem;
+  }
+  
+  .compact-mode .p-6 {
+    padding: 1rem;
+  }
+  
+  .compact-mode .gap-4 {
+    gap: 0.75rem;
+  }
+  
+  .compact-mode .gap-6 {
+    gap: 1rem;
+  }
+
+  .high-contrast {
+    --foreground: hsl(0, 0%, 0%);
+    --background: hsl(0, 0%, 100%);
+    --primary: hsl(240, 100%, 50%);
+    --primary-foreground: hsl(0, 0%, 100%);
+    --border: hsl(0, 0%, 0%);
+  }
+  
+  .dark.high-contrast {
+    --foreground: hsl(0, 0%, 100%);
+    --background: hsl(0, 0%, 0%);
+    --primary: hsl(60, 100%, 50%);
+    --primary-foreground: hsl(0, 0%, 0%);
+    --border: hsl(0, 0%, 100%);
+  }
+
+  .no-animations * {
+    transition: none !important;
+    animation: none !important;
+    transform: none !important;
   }
 }
