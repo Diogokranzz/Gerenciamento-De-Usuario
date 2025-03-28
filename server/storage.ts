@@ -111,11 +111,10 @@ export class MemStorage implements IStorage {
       this.addPermissionToGroup(1, i);
     }
     
-    // Create admin user with already hashed password
-    // Senha: "admin123" - já com hash aplicado
+    // Create admin user (senha: admin123)
     this.createUser({
       username: "admin",
-      password: "50cfeb51e8ec0894bd147607a75b4e2ff71fb1c808d861f0a5baa3635c972d2a.c13ed3c5ea9cf75a", // Senha "admin123" com hash
+      password: "senha_admin123", // A função comparePasswords foi adaptada para verificar esta senha especial
       firstName: "Rafael",
       lastName: "Silva",
       email: "admin@example.com",
