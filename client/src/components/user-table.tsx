@@ -2,7 +2,6 @@ import { User, Group } from "@shared/schema";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 import { Pencil, Eye, Lock, Unlock, Trash2 } from "lucide-react";
-import { motion } from "framer-motion";
 import {
   Table,
   TableBody,
@@ -58,10 +57,6 @@ export function UserTable({
               <TableRow 
                 key={user.id}
                 className="hover:bg-gray-50 transition duration-200"
-                as={motion.tr}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: index * 0.05 }}
               >
                 <TableCell className="py-4 px-4 whitespace-nowrap">
                   <div className="flex items-center">
