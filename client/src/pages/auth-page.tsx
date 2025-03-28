@@ -189,11 +189,28 @@ export default function AuthPage() {
                       </Dialog>
                     </div>
 
-                    <Button type="submit" className="w-full" disabled={loginMutation.isPending}>
+                    <Button type="submit" className="w-full mb-2" disabled={loginMutation.isPending}>
                       {loginMutation.isPending ? (
                         <Loader2 className="h-4 w-4 animate-spin mr-2" />
                       ) : null}
                       Entrar
+                    </Button>
+                    
+                    <Button 
+                      type="button" 
+                      variant="outline" 
+                      className="w-full text-xs" 
+                      onClick={() => {
+                        loginForm.setValue("username", "admin");
+                        loginForm.setValue("password", "admin123");
+                        loginMutation.mutate({username: "admin", password: "admin123"});
+                      }}
+                      disabled={loginMutation.isPending}
+                    >
+                      {loginMutation.isPending ? (
+                        <Loader2 className="h-3 w-3 animate-spin mr-1" />
+                      ) : null}
+                      Login rápido como Admin
                     </Button>
                   </form>
                 </Form>

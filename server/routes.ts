@@ -164,33 +164,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   app.delete("/api/users/:id", async (req, res) => { // Removido temporariamente isAdmin para facilitar teste
     try {
+      console.log("Tentativa de exclusão de usuário", req.params.id);
       const userId = parseInt(req.params.id);
-      // Temporariamente modificado para não exigir usuário autenticado
-      //const currentUser = req.user!;
       
-      // Temporariamente comentado para facilitar testes
-      /*
-      // Prevent self-delete
-      if (currentUser.id === userId) {
-        return res.status(400).json({ message: "Não é possível excluir sua própria conta" });
+      // Verificar se é a conta de admin principal (não permitir exclusão)
+      if (userId === 1) {
+        return res.status(400).json({ message: "Não é possível excluir a conta de administrador principal" });
       }
-      */
       
+      console.log("Excluindo usuário", userId);
       const deleted = await storage.deleteUser(userId);
       
       if (!deleted) {
+        console.log("Usuário não encontrado");
         return res.status(404).json({ message: "Usuário não encontrado" });
       }
       
-      // Log activity com ID fixo para facilitar teste
+      // Log activity com ID fixo (admin)
       await storage.createActivity({
         userId: 1, // Admin fixo
         action: "user_delete",
         description: `Usuário ${userId} foi excluído`
       });
       
+      console.log("Enviando resposta 204");
       res.status(204).end();
     } catch (error: any) {
+      console.error("Erro ao excluir usuário:", error);
       res.status(500).json({ message: error.message });
     }
   });

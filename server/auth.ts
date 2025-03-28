@@ -23,13 +23,20 @@ async function hashPassword(password: string) {
 
 async function comparePasswords(supplied: string, stored: string) {
   try {
+    console.log("Login debug: Comparando senhas");
+    console.log("Login debug: Senha fornecida =", supplied);
+    console.log("Login debug: Senha armazenada =", stored);
+    
     // Tratamento especial para o usuário admin
     if (stored === "senha_admin123") {
-      return supplied === "admin123";
+      const result = supplied === "admin123";
+      console.log("Login debug: Verificação especial para admin, resultado =", result);
+      return result;
     }
     
     // Verificação normal de senha com hash
     if (stored.includes('.')) {
+      console.log("Login debug: Senha contém ponto, fazendo verificação de hash");
       const [hashed, salt] = stored.split(".");
       
       if (!hashed || !salt) {
@@ -40,7 +47,9 @@ async function comparePasswords(supplied: string, stored: string) {
       const hashedBuf = Buffer.from(hashed, "hex");
       const suppliedBuf = (await scryptAsync(supplied, salt, 64)) as Buffer;
       
-      return timingSafeEqual(hashedBuf, suppliedBuf);
+      const result = timingSafeEqual(hashedBuf, suppliedBuf);
+      console.log("Login debug: Resultado da verificação de hash =", result);
+      return result;
     }
     
     // Caso a senha armazenada não esteja no formato esperado
