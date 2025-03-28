@@ -314,8 +314,8 @@ export default function GroupsPage() {
                             
                             <AlertDialog>
                               <AlertDialogTrigger asChild>
-                                <Button variant="ghost" size="icon">
-                                  <Trash2 className="h-4 w-4 text-red-500" />
+                                <Button variant="destructive" size="icon" className="bg-red-600 hover:bg-red-700">
+                                  <Trash2 className="h-4 w-4 text-white" />
                                 </Button>
                               </AlertDialogTrigger>
                               <AlertDialogContent>

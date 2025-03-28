@@ -14,6 +14,10 @@ const isAuthenticated = (req: Request, res: Response, next: Function) => {
   if (req.isAuthenticated()) {
     return next();
   }
+  
+  // Log para debug
+  console.log("Autenticação falhou, redirecionando para login");
+  
   res.status(401).json({ message: "Não autenticado" });
 };
 

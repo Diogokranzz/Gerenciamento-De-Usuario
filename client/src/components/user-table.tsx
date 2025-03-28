@@ -147,12 +147,13 @@ export function UserTable({
                       </Button>
                     )}
                     <Button 
-                      variant="ghost" 
+                      variant="destructive" 
                       size="icon"
                       onClick={() => onDeleteUser?.(user.id)}
                       title="Excluir"
+                      className="bg-red-600 hover:bg-red-700"
                     >
-                      <Trash2 className="h-4 w-4 text-red-600" />
+                      <Trash2 className="h-4 w-4 text-white" />
                     </Button>
                   </div>
                 </TableCell>
