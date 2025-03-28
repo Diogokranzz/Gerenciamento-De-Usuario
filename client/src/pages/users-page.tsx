@@ -44,14 +44,26 @@ export default function UsersPage() {
   const [searchQuery, setSearchQuery] = useState("");
 
   // Fetch users
-  const { data: users, isLoading: isLoadingUsers } = useQuery<any[]>({
+  const { data: users, isLoading: isLoadingUsers, isError: isUsersError } = useQuery<any[]>({
     queryKey: ["/api/users"],
+    refetchOnMount: true, // Garante que os dados sejam buscados quando o componente é montado
+    refetchOnWindowFocus: true, // Atualiza os dados quando a janela ganha foco
+    retry: 3, // Tenta novamente 3 vezes em caso de falha
   });
 
   // Fetch groups
-  const { data: groups, isLoading: isLoadingGroups } = useQuery<any[]>({
+  const { data: groups, isLoading: isLoadingGroups, isError: isGroupsError } = useQuery<any[]>({
     queryKey: ["/api/groups"],
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+    retry: 3,
   });
+  
+  // Log para debug
+  console.log("Users data:", users);
+  console.log("Groups data:", groups);
+  console.log("Users error:", isUsersError);
+  console.log("Groups error:", isGroupsError);
 
   // Filter users based on search query
   const filteredUsers = users?.filter(user => {
@@ -303,18 +315,30 @@ export default function UsersPage() {
                           render={({ field }) => (
                             <FormItem>
                               <FormLabel>Grupo</FormLabel>
-                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <Select 
+                                onValueChange={field.onChange} 
+                                defaultValue={field.value}
+                              >
                                 <FormControl>
-                                  <SelectTrigger>
+                                  <SelectTrigger className="w-full">
                                     <SelectValue placeholder="Selecione um grupo" />
                                   </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                  {groups?.map((group) => (
-                                    <SelectItem key={group.id} value={group.id.toString()}>
-                                      {group.name}
+                                  {groups && groups.length > 0 ? (
+                                    groups.map((group) => (
+                                      <SelectItem 
+                                        key={group.id} 
+                                        value={group.id.toString()}
+                                      >
+                                        {group.name}
+                                      </SelectItem>
+                                    ))
+                                  ) : (
+                                    <SelectItem value="" disabled>
+                                      Nenhum grupo disponível
                                     </SelectItem>
-                                  ))}
+                                  )}
                                 </SelectContent>
                               </Select>
                               <FormMessage />
