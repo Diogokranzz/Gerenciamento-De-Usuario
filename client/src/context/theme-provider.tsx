@@ -35,13 +35,36 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     // Aplicar classes ao documento baseado nas configurações
     const documentElement = document.documentElement;
+    const body = document.body;
     
     if (darkMode) {
       documentElement.classList.add('dark');
-      documentElement.style.setProperty('--theme-appearance', 'dark');
+      document.documentElement.setAttribute('data-theme', 'dark');
+      
+      // Alterar o valor do tema diretamente no arquivo theme.json e no tailwind
+      const metaTag = document.createElement('meta');
+      metaTag.name = 'theme-color';
+      metaTag.content = '#1e1e2e';
+      document.head.appendChild(metaTag);
+      
+      // Adicionando classes específicas para o modo escuro
+      body.classList.add('dark-mode');
+      body.style.backgroundColor = 'hsl(240 10% 3.9%)';
+      body.style.color = 'hsl(0 0% 98%)';
     } else {
       documentElement.classList.remove('dark');
-      documentElement.style.setProperty('--theme-appearance', 'light');
+      document.documentElement.setAttribute('data-theme', 'light');
+      
+      // Remover meta tag se existir
+      const metaTag = document.querySelector('meta[name="theme-color"]');
+      if (metaTag) {
+        metaTag.remove();
+      }
+      
+      // Removendo classes específicas para o modo escuro
+      body.classList.remove('dark-mode');
+      body.style.backgroundColor = '';
+      body.style.color = '';
     }
     
     if (compactMode) {

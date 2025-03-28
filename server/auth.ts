@@ -56,10 +56,10 @@ export function setupAuth(app: Express) {
   const sessionSettings: session.SessionOptions = {
     secret: process.env.SESSION_SECRET || "sistema-gerenciamento-usuario-secreto-2023",
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true, // Alterado para true para persistir sessões
     store: storage.sessionStore,
     cookie: {
-      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 dias
       secure: false, // Não usar "secure" em desenvolvimento
       httpOnly: true,
       path: "/",
