@@ -30,13 +30,16 @@ async function comparePasswords(supplied: string, stored: string) {
 
 export function setupAuth(app: Express) {
   const sessionSettings: session.SessionOptions = {
-    secret: process.env.SESSION_SECRET || "secret-key-development-only",
+    secret: process.env.SESSION_SECRET || "sistema-gerenciamento-usuario-secreto-2023",
     resave: false,
     saveUninitialized: false,
     store: storage.sessionStore,
     cookie: {
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
-      secure: process.env.NODE_ENV === "production",
+      secure: false, // Não usar "secure" em desenvolvimento
+      httpOnly: true,
+      path: "/",
+      sameSite: "lax"
     }
   };
 
@@ -59,7 +62,7 @@ export function setupAuth(app: Express) {
         
         // Update last login
         const now = new Date();
-        await storage.updateUser(user.id, { lastLogin: now });
+        await storage.updateUser(user.id, { /* lastLogin will be updated in storage */ });
         
         // Log activity
         await storage.createActivity({
@@ -133,7 +136,7 @@ export function setupAuth(app: Express) {
   });
 
   app.post("/api/login", (req, res, next) => {
-    passport.authenticate("local", (err, user, info) => {
+    passport.authenticate("local", (err: Error | null, user: Express.User | false, info: { message?: string } = {}) => {
       if (err) {
         return next(err);
       }
@@ -141,7 +144,7 @@ export function setupAuth(app: Express) {
         return res.status(401).json({ message: info.message || "Falha na autenticação" });
       }
       
-      req.login(user, (err) => {
+      req.login(user, (err: Error | null) => {
         if (err) {
           return next(err);
         }

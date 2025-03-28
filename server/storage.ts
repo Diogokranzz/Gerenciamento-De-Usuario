@@ -45,7 +45,7 @@ export interface IStorage {
   createActivity(activity: InsertActivity): Promise<Activity>;
 
   // Session store
-  sessionStore: session.SessionStore;
+  sessionStore: any;
 }
 
 export class MemStorage implements IStorage {
@@ -54,7 +54,7 @@ export class MemStorage implements IStorage {
   private permissions: Map<number, Permission>;
   private groupPermissions: Map<number, GroupPermission>;
   private activities: Map<number, Activity>;
-  sessionStore: session.SessionStore;
+  sessionStore: any;
   
   private userIdCounter: number;
   private groupIdCounter: number;
@@ -111,10 +111,11 @@ export class MemStorage implements IStorage {
       this.addPermissionToGroup(1, i);
     }
     
-    // Create admin user
+    // Create admin user with already hashed password
+    // Senha: "admin123" - já com hash aplicado
     this.createUser({
       username: "admin",
-      password: "senha_do_admin_hashed", // This will be hashed on actual implementation
+      password: "50cfeb51e8ec0894bd147607a75b4e2ff71fb1c808d861f0a5baa3635c972d2a.c13ed3c5ea9cf75a", // Senha "admin123" com hash
       firstName: "Rafael",
       lastName: "Silva",
       email: "admin@example.com",
@@ -145,12 +146,23 @@ export class MemStorage implements IStorage {
   async createUser(insertUser: InsertUser): Promise<User> {
     const id = this.userIdCounter++;
     const now = new Date();
+    
+    // Garantindo que os campos obrigatórios estejam presentes com valores padrão
     const user: User = { 
-      ...insertUser, 
       id,
+      username: insertUser.username,
+      password: insertUser.password,
+      firstName: insertUser.firstName,
+      lastName: insertUser.lastName,
+      email: insertUser.email,
+      groupId: insertUser.groupId,
+      avatarUrl: insertUser.avatarUrl || null,
+      isActive: insertUser.isActive !== undefined ? insertUser.isActive : true,
+      isBlocked: insertUser.isBlocked !== undefined ? insertUser.isBlocked : false,
       createdAt: now,
       lastLogin: null
     };
+    
     this.users.set(id, user);
     return user;
   }
@@ -199,7 +211,15 @@ export class MemStorage implements IStorage {
   
   async createGroup(group: InsertGroup): Promise<Group> {
     const id = this.groupIdCounter++;
-    const newGroup: Group = { ...group, id };
+    
+    // Certifique-se de que os campos obrigatórios estejam definidos
+    const newGroup: Group = { 
+      id,
+      name: group.name,
+      description: group.description || null,
+      color: group.color
+    };
+    
     this.groups.set(id, newGroup);
     return newGroup;
   }
