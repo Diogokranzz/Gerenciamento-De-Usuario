@@ -40,14 +40,22 @@ npm install
 ```
 
 3. Inicie a aplicação:
+
+Método padrão:
 ```bash
 npm run dev
+```
+
+Se encontrar problemas com a porta 5000 (erro ENOTSUP ou EADDRINUSE), use o script auxiliar:
+```bash
+node start-local.js
 ```
 
 4. Acesse o sistema no navegador:
 ```
 http://localhost:5000
 ```
+(ou na porta alternativa indicada pelo script auxiliar)
 
 ## Credenciais de acesso
 O sistema é inicializado com um usuário administrador padrão:
@@ -64,6 +72,30 @@ O sistema é inicializado com um usuário administrador padrão:
 - Proteção contra exclusão do administrador principal
 - Validação de dados em todas as operações
 - Controle de sessão seguro
+
+## Solução de Problemas
+
+### Erro ao iniciar o servidor
+Se você encontrar erros como `ENOTSUP: operation not supported on socket` ou `EADDRINUSE: address already in use`, tente:
+
+1. Use o script auxiliar que detecta automaticamente portas disponíveis:
+   ```bash
+   node start-local.js
+   ```
+
+2. Execute com uma porta específica definida manualmente:
+   ```bash
+   PORT=3000 npm run dev
+   ```
+
+3. Verifique e encerre processos usando a porta 5000:
+   - No Windows: `netstat -ano | findstr :5000`
+   - No Linux/Mac: `lsof -i :5000`
+
+### Outros problemas
+- Certifique-se de ter a versão do Node.js compatível (16+)
+- Se houver erros de módulos não encontrados, tente `npm install` novamente
+- Para erros de compilação, verifique se o TypeScript está instalado corretamente
 
 ## Contribuição
 Sinta-se à vontade para contribuir com este projeto! Abra uma issue ou envie um pull request com suas melhorias.
